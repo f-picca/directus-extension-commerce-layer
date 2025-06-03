@@ -54,26 +54,42 @@
 
 <style scoped>
 .interface-box {
-  padding: 1rem;
-  background-color: #f0f9ff;
-  border: 1px solid #cce;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  color: #333;
+  padding: 2rem;
+  background-color: #fff;
+  border: 1px solid #e5eaf2;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(42, 91, 215, 0.06);
+  font-size: 1.08rem;
+  color: #222;
+  max-width: 900px;
+  margin: 2rem auto;
 }
 
 .commerce-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px 0 rgba(42, 91, 215, 0.04);
 }
 
-.commerce-table th,
-.commerce-table td {
-  border: 1px solid #dde;
-  padding: 0.5rem 0.75rem;
-  vertical-align: top;
+.commerce-table th {
+  background: #f5f8fa;
+  color: #2a5bd7;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e5eaf2;
   text-align: left;
+  letter-spacing: 0.02em;
+}
+
+.commerce-table td {
+  border-bottom: 1px solid #e5eaf2;
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  background: #fff;
 }
 
 .price-list,
@@ -86,22 +102,39 @@
 .price-list li,
 .stock-list li {
   margin-bottom: 0.25rem;
+  padding: 0.15rem 0;
 }
 
 .amount {
-  color: #1a7f37;
-  font-weight: bold;
+  color: #2a5bd7;
+  font-weight: 600;
 }
 
 .compare-at {
   color: #b91c1c;
   margin-left: 0.5em;
   text-decoration: line-through;
+  font-size: 0.95em;
 }
 
 .quantity {
-  color: #2563eb;
-  font-weight: bold;
+  color: #2a5bd7;
+  font-weight: 600;
+}
+
+.commerce-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 700px) {
+  .interface-box {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  .commerce-table th,
+  .commerce-table td {
+    padding: 0.5rem 0.3rem;
+  }
 }
 </style>
 
@@ -112,15 +145,25 @@ import { useApi } from "@directus/extensions-sdk";
 export default defineComponent({
   name: "Commerce Data",
   props: {
-    modelValue: {
-      type: [String, Array, Object],
-      default: null,
+    collection: {
+      type: String,
+      required: true,
     },
   },
-  setup() {
+  setup(props) {
     const api = useApi();
     const commerce_data = ref({});
-    const values = inject<{ value: { skus?: string[] } }>("values");
+
+    let values:
+      | { value: { skus?: string[] | undefined } }
+      | { value: { code?: string | undefined } }
+      | undefined;
+
+    if (props.collection === "products") {
+      values = inject<{ value: { skus?: string[] } }>("values");
+    } else if (props.collection === "skus") {
+      values = inject<{ value: { code?: string } }>("values");
+    }
 
     const getCommerceData = async (skus: string[]) => {
       if (!skus || skus.length === 0) return;
@@ -138,7 +181,22 @@ export default defineComponent({
     };
 
     watchEffect(() => {
-      const skus = values?.value?.skus;
+      if (!values) return;
+
+      let skus;
+
+      // If collection is products, get skus from values
+      // If collection is skus, get code from values
+
+      if (props.collection === "products") {
+        skus = values && "skus" in values.value ? values.value.skus : [];
+      } else if (props.collection === "skus") {
+        skus =
+          values && "code" in values.value && values.value.code
+            ? [values.value.code]
+            : [];
+      }
+
       if (skus) getCommerceData(skus);
     });
 
@@ -148,15 +206,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.interface-box {
-  padding: 1rem;
-  background-color: #f0f9ff;
-  border: 1px solid #cce;
-  border-radius: 6px;
-  font-size: 1.2rem;
-  text-align: center;
-  color: #333;
-}
-</style>
