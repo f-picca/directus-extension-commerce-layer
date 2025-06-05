@@ -173,7 +173,26 @@ export default defineComponent({
         if (response.status !== 200) {
           commerce_data.value = `Failed to fetch data: ${response.statusText}`;
         }
-
+        if (Array.isArray(response.data)) {
+          // Update Directus SKU models with the data from the endpoint
+          // Assuming response.data is an array of SKU objects with a "code" property
+          for (const skuData of response.data) {
+            console.log("Processing SKU data:", skuData);
+            if (skuData.code) {
+              try {
+                // Update the SKU item in Directus by code
+                await api.patch(`/items/skus/${skuData.code}`, {
+                  cl_id: skuData.id,
+                });
+              } catch (updateErr) {
+                console.error(
+                  `Failed to update SKU ${skuData.code}:`,
+                  updateErr
+                );
+              }
+            }
+          }
+        }
         commerce_data.value = response.data;
       } catch (err) {
         console.error("Error fetching commerce data:", err);

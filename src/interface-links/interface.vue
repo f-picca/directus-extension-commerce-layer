@@ -45,7 +45,7 @@ export default defineComponent({
       throw new Error("This component is only for the skus collection.");
     }
 
-    const values = inject<{ value: { code: string } }>("values");
+    const values = inject<{ value: { code: string; cl_id: string } }>("values");
 
     function redirectToSkuPage() {
       if (!selected_sku) {
@@ -53,7 +53,7 @@ export default defineComponent({
         return;
       }
       try {
-        const url = `${props.commerce_layer_dashboard_url}apps/skus/${selected_sku}`;
+        const url = `${props.commerce_layer_dashboard_url}apps/skus/list/${selected_sku}`;
         window.open(url, "_blank");
       } catch (error) {
         console.error("Error opening SKU link:", error);
@@ -74,9 +74,7 @@ export default defineComponent({
           console.error("Failed to create checkout link:", response.statusText);
           return;
         }
-
-        console.log("Checkout link created:", response.data);
-        // window.open(response.data, "_blank");
+        window.open(response.data, "_blank");
       } catch (error) {
         console.error("Error opening checkout link:", error);
       }
@@ -87,7 +85,7 @@ export default defineComponent({
     }
 
     watchEffect(() => {
-      selected_sku = values?.value.code || undefined;
+      selected_sku = values?.value.cl_id || undefined;
     });
 
     async function fetchCountries() {
