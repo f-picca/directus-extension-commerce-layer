@@ -3,7 +3,8 @@
   "description": "An extension for Directus that integrates with Commerce Layer, providing endpoints and interfaces for commerce data.",
   "author": "Commerce Layer Team",
   "icon": "extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "license": "MIT",
   "keywords": [
     "directus",
     "directus-extension",
@@ -28,7 +29,12 @@
       {
         "type": "interface",
         "name": "cl-commerce-data-interface",
-        "source": "src/commerce-data-interface/index.ts"
+        "source": "src/interface-data/index.ts"
+      },
+      {
+        "type": "interface",
+        "name": "interface-links",
+        "source": "src/interface-links/index.ts"
       }
     ],
     "host": "^10.10.0"
@@ -42,7 +48,7 @@
   },
   "devDependencies": {
     "@directus/extensions-sdk": "13.1.1",
-    "@types/node": "^22.15.27",
+    "@types/node": "^22.15.29",
     "typescript": "^5.8.3",
     "vue": "^3.5.16"
   },

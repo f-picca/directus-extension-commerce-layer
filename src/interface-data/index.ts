@@ -11,4 +11,5 @@ export default defineInterface({
 	types: ['alias'],
 	group: 'presentation',
 	onlyPresentation: true,
+	localTypes: ['presentation'],
 });
