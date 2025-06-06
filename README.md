@@ -4,7 +4,7 @@ This extension integrates [Commerce Layer](https://commercelayer.io/) with your 
 
 ## Features
 
-- Sync products, orders, and customers between Commerce Layer and Directus
+- Sync skus between Commerce Layer and Directus
 - Manage Commerce Layer resources directly from Directus
 - Webhook support for real-time updates
 
