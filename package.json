@@ -43,6 +43,14 @@
           "app": "src/create-sku/app.ts",
           "api": "src/create-sku/api.ts"
         }
+      },
+      {
+        "type": "operation",
+        "name": "delete-sku",
+        "source": {
+          "app": "src/delete-sku/app.ts",
+          "api": "src/delete-sku/api.ts"
+        }
       }
     ],
     "host": "^10.10.0"
@@ -56,9 +64,9 @@
   },
   "devDependencies": {
     "@directus/extensions-sdk": "13.1.1",
-    "@types/node": "^22.15.30",
+    "@types/node": "^24.0.10",
     "typescript": "^5.8.3",
-    "vue": "^3.5.16"
+    "vue": "^3.5.17"
   },
   "dependencies": {
     "@commercelayer/js-auth": "^6.7.2",
