@@ -17,6 +17,7 @@ export default defineOperationApi<Options>({
 
 	id: 'create-sku',
 	handler: async ({new_sku},context) => {
+		const directusUrl = process.env['DIRECTUS_URL'] || 'http://localhost:8055';
 		const logger = context.logger;
 		const {services,getSchema} = context;
 		const { ItemsService} = services;
@@ -32,7 +33,7 @@ export default defineOperationApi<Options>({
 				code: new_sku['code'],
 				name: `${product.name} (${new_sku['size']})`,
 				shipping_category: clClient.shipping_categories.relationship(new_sku['shipping_category']),
-
+				image_url: `${directusUrl}/assets/${product.main_image}`,
 			});
 
 			const skusService = new ItemsService('skus', { schema: getSchema() });
