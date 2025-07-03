@@ -49,7 +49,7 @@ export  async function getCommerceLayerClient() {
 
 export default {
 	id: 'cl-endpoint',
-	handler: (router: { get: (arg0: string, arg1: (_req: any, res: any) => Promise<any>) => void; }) => {
+	handler: (router: { get: (arg0: string, arg1: (_req: any, res: any) => Promise<any>) => void; post: (arg0: string, arg1: (_req: any, res: any) => Promise<any>) => void; }) => {
 		router.get('/', async (_req, res) => {
 			const skus = _req.query.skus || [];
 	
@@ -69,7 +69,7 @@ export default {
 					stock_items: ['stock_location', 'quantity'],
 					price_lists: ['name'],
 				},
-				include: ['prices', 'stock_items', 'stock_items.stock_location','prices.price_list'],
+				include: ['prices', 'stock_items', 'stock_items.stock_location','prices.price_list','shipping_category'],
 			});
 	
 			if (skusWithData.length === 0) {
@@ -111,6 +111,11 @@ export default {
 
 			return res.send(salesLink.url);
 		});
+		router.post('/sku', async (_req, res) => {
+			const skuData = _req.body;
+			console.log('Creating SKU with data:', skuData);
+		
+		})	
 	}
 }
 

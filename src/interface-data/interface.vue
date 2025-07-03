@@ -150,7 +150,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ["input", "update:modelValue"],
+  setup(props, { emit }) {
     const api = useApi();
     const commerce_data = ref({});
 
@@ -180,10 +181,35 @@ export default defineComponent({
             console.log("Processing SKU data:", skuData);
             if (skuData.code) {
               try {
-                // Update the SKU item in Directus by code
+                // Update the SKU item in Directus by code adding Commerce Layer ID
                 await api.patch(`/items/skus/${skuData.code}`, {
                   cl_id: skuData.id,
                 });
+                // sync shipping category and update directus entry accordingly
+                try {
+                  await api.get(
+                    `/items/shipping_categories/${skuData.shipping_category.id}`
+                  );
+                  // Exists, update
+                  await api.patch(
+                    `/items/shipping_categories/${skuData.shipping_category.id}`,
+                    { name: skuData.shipping_category.name }
+                  );
+
+                  await api.patch(`/items/skus/${skuData.code}`, {
+                    shipping_category: skuData.shipping_category.id,
+                  });
+                } catch (err: any) {
+                  // Not found, create
+                  await api.post(`/items/shipping_categories`, {
+                    cl_id: skuData.shipping_category.id,
+                    name: skuData.shipping_category.name,
+                  });
+
+                  emit("update:modelValue", {
+                    shipping_category: skuData.shipping_category.id,
+                  });
+                }
               } catch (updateErr) {
                 console.error(
                   `Failed to update SKU ${skuData.code}:`,
