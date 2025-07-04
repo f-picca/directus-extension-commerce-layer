@@ -1,5 +1,6 @@
 import { defineOperationApi } from '@directus/extensions-sdk';
 import { getCommerceLayerClient } from '../endpoint';
+import slugify from 'slugify';
 
 
 type LocalSku = {
@@ -39,6 +40,7 @@ export default defineOperationApi<Options>({
 			const skusService = new ItemsService('skus', { schema: getSchema() });
 			const skuData = await skusService.updateOne(new_sku['code'], {
 				cl_id: response.id,
+				slug:`/${slugify(product.name, { lower: true })}/${new_sku['code']}`, 
 			});
 
 			logger.info('SKU created successfully in Commerce Layer:', response.code);

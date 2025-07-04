@@ -70,6 +70,7 @@
   },
   "dependencies": {
     "@commercelayer/js-auth": "^6.7.2",
-    "@commercelayer/sdk": "^6.42.0"
+    "@commercelayer/sdk": "^6.42.0",
+    "slugify": "^1.6.6"
   }
 }
