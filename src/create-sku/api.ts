@@ -24,7 +24,7 @@ export default defineOperationApi<Options>({
 		const { ItemsService} = services;
 
 		//get parent product
-		const productsService = new ItemsService('products', { schema: getSchema() });
+		const productsService = new ItemsService('products', { schema: await getSchema() });
 		const product = await productsService.readOne(new_sku['product_code'])
 
 		const clClient = await getCommerceLayerClient();
@@ -37,7 +37,7 @@ export default defineOperationApi<Options>({
 				image_url: `${directusUrl}/assets/${product.main_image}`,
 			});
 
-			const skusService = new ItemsService('skus', { schema: getSchema() });
+			const skusService = new ItemsService('skus', {  schema: await getSchema() });
 			const skuData = await skusService.updateOne(new_sku['code'], {
 				cl_id: response.id,
 				slug:`/${slugify(product.name, { lower: true })}/${new_sku['code']}`, 

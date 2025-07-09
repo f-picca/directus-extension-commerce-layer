@@ -51,6 +51,14 @@
           "app": "src/delete-sku/app.ts",
           "api": "src/delete-sku/api.ts"
         }
+      },
+      {
+        "type": "operation",
+        "name": "taxon-sku_list-sync",
+        "source": {
+          "app": "src/taxon-sku_list-sync/app.ts",
+          "api": "src/taxon-sku_list-sync/api.ts"
+        }
       }
     ],
     "host": "^10.10.0"
