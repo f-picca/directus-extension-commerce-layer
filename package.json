@@ -3,7 +3,7 @@
   "description": "An extension for Directus that integrates with Commerce Layer, providing endpoints and interfaces for commerce data.",
   "author": "Commerce Layer Team",
   "icon": "extension",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "keywords": [
     "directus",
